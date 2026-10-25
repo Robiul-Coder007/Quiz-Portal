@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <div>
+        <div>
+            <div>
+                <h3>{{ page }}</h3>
+                <p>Logged in as: {{ request.user.username }}</p>
+            </div>
+        </div>
+        {% if is_admin %}
+        <div>
+            <div>
+                <span>TOTAL QUIZZES</span>
+                <h2>{{ quiz_count }}</h2>
+            </div>
+            <div>
+                <a href="{% url 'add_quiz' %}">Create New Quiz</a>
+            </div>
+        </div>
+        <h5>Manage Quizzes</h5>
+        <div>
+            <table class="table table-secodary table-striped">
+                <thead>
+                    <tr>
+                        <th>Quiz Title</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.title }}</td>
+                        <td>{{ quiz.description|default:"No description provided" }}</td>
+                        <td><a href="{% url 'quiz_detail' quiz.id %}">View</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No quizzes created yet. Click 'Create New Quiz' to get started.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div>
+            <div>
+                <div>
+                    <span>PARTICIPANT PROFILE</span>
+                    <h5>{{ profile.name|default:request.user.username }}</h5>
+                    <p>{{ profile.institution }} | {{ profile.student_class }}</p>
+                </div>
+                <a href="{% url 'participant' %}">Edit Profile</a>
+            </div>
+        </div>
+        <h5>Available Quizzes</h5>
+        <div>
+            <table class="table table-secodary table-striped">
+                <thead>
+                    <tr>
+                        <th>Quiz Title</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.title }}</td>
+                        <td>{{ quiz.description|default:"No description provided" }}</td>
+                        <td><a href="{% url 'start_quiz' quiz.id %}">Start</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No quizzes are currently available to participate.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load static %}
+<div class="container mt-4">
+  <div style="font-size: 18px; margin-top: 15px;">
+    <nav
+      style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <a href="{% url 'dashboard' %}" style="font-weight: bold; text-decoration: none; color: black;">Quiz Portal</a>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" style="text-decoration: none;">Dashboard</a>
+        {% if request.user.is_staff or request.user.is_superuser %}
+        <a href="{% url 'add_quiz' %}" style="text-decoration: none;">Create Quiz</a>
+        {% endif %}
+        <a href="{% url 'view_result' %}" style="text-decoration: none;">View Results</a>
+        {% endif %}
+      </div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        {% if request.user.is_authenticated %}
+        <div style="position: relative; display: inline-block;">
+          <select onchange="if(this.value) location = this.value;" style="font-size: 16px; padding: 4px 8px;">
+            <option value="" selected disabled>Hi, {{ request.user.username }}</option>
+            {% if not request.user.is_staff and not request.user.is_superuser %}
+            <option value="{% url 'participant' %}">Edit Profile</option>
+            {% endif %}
+            <option value="{% url 'change_pass' %}">Change Password</option>
+            <option value="{% url 'user_logout' %}">Logout</option>
+          </select>
+        </div>
+        {% else %}
+        <a href="{% url 'user_login' %}" style="text-decoration: none;">Login</a>
+        <a href="{% url 'register' %}" style="text-decoration: none; font-weight: bold;">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h3>Register</h3>
+    <p>Join our Quiz Portal as a participant</p>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+    <hr>
+    <div>
+        <p>Already have an account? <a href="{% url 'user_login' %}">Login Here</a></p>
+    </div>
+</div>
+{% endblock %}

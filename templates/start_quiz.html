@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <div>
+        <span>LIVE EXAMINATION BOARD</span>
+        <h3>{{ quiz.title }}</h3>
+        <p>Candidate: <strong>{{ profile.name }}</strong> ({{ request.user.username }})</p>
+        <p>Total Items: {{ question_count }}</p>
+    </div>
+    <hr>
+    <form method="POST" action="{% url 'start_quiz' quiz.id %}">
+        {% csrf_token %}
+        {% for item in quiz_data %}
+        <div>
+            <h4>Q{{ forloop.counter }}. {{ item.question.question }}</h4>
+            <div>
+                {% for option in item.options %}
+                <div>
+                    <input type="radio" name="question_{{ item.question.id }}" id="option_{{ option.id }}" value="{{ option.id }}" required>
+                    <label for="option_{{ option.id }}">{{ option.option }}</label>
+                </div>
+                {% empty %}
+                <p>No answer options compiled for this question item yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+        <hr>
+        <div>
+            <button type="submit" onclick="return confirm('Are you sure you want to finish the exam and submit your choices for scoring evaluation?');">
+                Submit Quiz
+            </button>
+            <a href="{% url 'dashboard' %}">Cancel Exam</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <div>
+        <h3>{{ page }}</h3>
+        <p>Total Performance Rows Logged: {{ result_count }}</p>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </div>
+    <br>
+    <table class="table table-secodary table-striped">
+        <thead>
+            <tr>
+                {% if is_admin %}
+                <th style="width: 30%;">Candidate Student</th>
+                {% endif %}
+                <th style="width: 30%;">Quiz Title Module</th>
+                <th style="width: 15%;">Score / Items</th>
+                <th style="width: 15%;">Rank</th>
+                <th style="width: 20%; text-align: right;">Completed At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in results_with_positions %}
+            <tr>
+                {% if is_admin %}
+                <td>
+                    <strong>{{ item.result.participant.name }}</strong><br>
+                    <span>{{ item.result.participant.institution }}</span>
+                </td>
+                {% endif %}
+                <td>{{ item.result.quiz.title }}</td>
+                <td>{{ item.result.score }} / {{ item.result.total_questions }}</td>
+                <td>Rank #{{ item.position }}</td>
+                <td style="text-align: right;">{{ item.result.completed_at|date:"d M Y, h:i A" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="{% if is_admin %}5{% else %}4{% endif %}" style="text-align: center;">
+                    No evaluation result logs registered yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

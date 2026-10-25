@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h3>{{ page }}</h3>
+    <p>Populate the required configuration fields below</p>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">Save Data</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
